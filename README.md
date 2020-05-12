@@ -1,30 +1,44 @@
-# <img src="src/docs/asciidoc/images/spring-framework.png" width="80" height="80"> Spring Framework [![Build Status](https://build.spring.io/plugins/servlet/wittified/build-status/SPR-PUBM)](https://build.spring.io/browse/SPR)
+### Spring源码构建
 
-This is the home of the Spring Framework: the foundation for all [Spring projects](https://spring.io/projects). Collectively the Spring Framework and the family of Spring projects are often referred to simply as "Spring". 
+#### 一、构建环境
 
-Spring provides everything required beyond the Java programming language for creating enterprise applications for a wide range of scenarios and architectures. Please read the [Overview](https://docs.spring.io/spring/docs/current/spring-framework-reference/overview.html#spring-introduction) section as reference for a more complete introduction.
+1. jdk8
+2. idea
 
-## Code of Conduct
+#### 二、下载源码构建编译
 
-This project is governed by the [Spring Code of Conduct](CODE_OF_CONDUCT.adoc). By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+1. [github下载源码](https://github.com/spring-projects/spring-framework) 
+2. idea打开项目 自动构建
+3. 构建完成后使用gradle编译  需要先编译spring-oxm
 
-## Access to Binaries
+> 注意：使用阿里云镜像构建更快
 
-For access to artifacts or a distribution zip, see the [Spring Framework Artifacts](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Artifacts) wiki page.
+```groovy
+maven { url "https://maven.aliyun.com/nexus/content/groups/public/"} 
+```
 
-## Documentation
+#### 三、编译遇到的问题
 
-The Spring Framework maintains reference documentation ([published](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/) and [source](src/docs/asciidoc)), Github [wiki pages](https://github.com/spring-projects/spring-framework/wiki), and an
-[API reference](https://docs.spring.io/spring-framework/docs/current/javadoc-api/). There are also [guides and tutorials](https://spring.io/guides) across Spring projects.
+1. 有test case 没通过  gradle -x test 跳过test case
 
-## Build from Source
+```
+gradle build -x testClasses -x test -x javadoc -x compileTestKotlin
+```
 
-See the [Build from Source](https://github.com/spring-projects/spring-framework/wiki/Build-from-Source) Wiki page and the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+#### 四、测试
 
-## Stay in Touch
+1. 构建gradle moudle    项目->右键new moudle->选择gradle 修改名称
+2. 找到对应moudle的build.gradle   添加spring核心依赖
 
-Follow [@SpringCentral](https://twitter.com/springcentral), [@SpringFramework](https://twitter.com/springframework), and its [team members](https://twitter.com/springframework/lists/team/members) on Twitter. In-depth articles can be found at [The Spring Blog](https://spring.io/blog/), and releases are announced via our [news feed](https://spring.io/blog/category/news).
+```groovy
+dependencies {
+    // 添加spring核心依赖
+    compile(project(":spring-context"))
+    compile(project(":spring-beans"))
+    compile(project(":spring-core"))
+    compile(project(":spring-aop"))
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+```
 
-## License
-
-The Spring Framework is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+3. 测试代码
